@@ -3,17 +3,18 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 
-def scrape(url, output_file):
+def fetch_html(url):
     response = requests.get(url)
-    soup = BeautifulSoup(response.text, "html.parser")
-    tables = soup.find_all("table")
+    return response.text
 
-    # Získání tabulek s hlasy pro strany (druhá a třetí tabulka)
-    party_tables = tables[1:3]
+def parse_data(html):
+    soup = BeautifulSoup(html, 'html.parser')
+    tables = soup.find_all("table")
+    party_tables = tables[1:3]  # druhá a třetí tabulka
     all_data = []
 
     for table in party_tables:
-        rows = table.find_all("tr")[2:]  # Přeskočíme hlavičky
+        rows = table.find_all("tr")[2:]  # přeskočíme hlavičky
         for row in rows:
             cols = row.find_all("td")
             if len(cols) >= 4:
@@ -24,17 +25,23 @@ def scrape(url, output_file):
                     "percent": cols[3].text.strip().replace('\xa0', '')
                 }
                 all_data.append(data)
+    return all_data
 
-    if all_data:
-        keys = all_data[0].keys()
+def save_to_csv(data, output_file):
+    if data:
+        keys = data[0].keys()
         with open(output_file, mode="w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=keys)
             writer.writeheader()
-            writer.writerows(all_data)
-
+            writer.writerows(data)
         print(f"Saved results to: {output_file}")
     else:
         print("No data to save.")
+
+def scrape(url, output_file):
+    html = fetch_html(url)
+    data = parse_data(html)
+    save_to_csv(data, output_file)
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
