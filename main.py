@@ -5,7 +5,7 @@ import csv
 
 def scrape(url, output_file):
     response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
+    soup = BeautifulSoup(response.text, "html.parser")
     tables = soup.find_all("table")
 
     # Získání tabulek s hlasy pro strany (druhá a třetí tabulka)
@@ -13,7 +13,7 @@ def scrape(url, output_file):
     all_data = []
 
     for table in party_tables:
-        rows = table.find_all("tr")[2:]  # přeskočíme hlavičky
+        rows = table.find_all("tr")[2:]  # Přeskočíme hlavičky
         for row in rows:
             cols = row.find_all("td")
             if len(cols) >= 4:
@@ -31,6 +31,7 @@ def scrape(url, output_file):
             writer = csv.DictWriter(f, fieldnames=keys)
             writer.writeheader()
             writer.writerows(all_data)
+
         print(f"Saved results to: {output_file}")
     else:
         print("No data to save.")
