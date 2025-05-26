@@ -1,3 +1,11 @@
+
+"""
+projekt_1.py: první projekt do Engeto Online Python Akademie
+
+author: Markéta Vorlová
+email: vorlovamarketa@seznam.cz
+"""
+
 import sys
 import requests
 from bs4 import BeautifulSoup
