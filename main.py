@@ -1,6 +1,6 @@
 
 """
-projekt_3.py: třetí projekt do Engeto Online Python Akademie
+main.py: třetí projekt do Engeto Online Python Akademie
 
 author: Markéta Vorlová
 email: vorlovamarketa@seznam.cz
